@@ -1,0 +1,69 @@
+# -*- coding: UTF-8 -*-
+
+import re
+import sys
+
+def changezdjh(file,nm):
+    nm=int(nm)
+    cp = re.compile(r'<案卷')
+    dt = re.compile(r'Zdjh="[0-9]*"')
+    dt1 = re.compile(r'Ajh="[0-9]*"')
+    file_data = ""
+    ajh=1
+    with open(file,'r',encoding='utf-8') as f:
+        for line in f:
+            k=re.search(cp,line)
+            if k:
+                l=re.search(dt,line)
+                if l:
+                    ll=l.group(0)
+                    line1=dt.sub(r'Zdjh="%s"'%nm,line)
+                    nn= dt1.sub(r'Ajh="%s"'%ajh,line1)
+                    nm+=1
+                    ajh+=1
+                    file_data += nn
+                else:
+                    file_data += line
+            else:
+                file_data += line
+
+    with open (file,'w+',encoding='utf-8') as f:
+        f.write(file_data)
+    
+def changefilenum(file):
+    cp = re.compile(r'<文件')
+    cp1 = re.compile(r'<案卷')
+    id = re.compile(r'\bId="([0-9]*)"')
+    dt1 = re.compile(r'\bFileId="([0-9]*)"')
+    file_data = ""
+    ajid=0
+    fileid=0
+    with open(file,'r',encoding='utf-8') as f:
+        for line in f:
+            k=re.search(cp,line)
+            kk=re.search(cp1,line)
+            if k:
+                l=re.search(id,line)
+                if l:
+                    nn=dt1.sub(r'FileId="%s"' % fileid,line)
+                    file_data += nn
+                else:
+                    file_data += line
+            elif kk:
+                l=re.search(id,line)
+                if l:
+                    ajid+=1
+                    nn=id.sub(r'Id="%s"' % ajid,line)
+                    fileid+=1
+                    file_data+=nn
+                    # print (nn)
+            else:
+                file_data += line
+
+    with open (file,'w+',encoding='utf-8') as f:
+        f.write(file_data)
+
+if __name__ =='__main__':
+    changezdjh(sys.argv[1],sys.argv[2])
+    changefilenum(sys.argv[1])
+    print ('\nok!')

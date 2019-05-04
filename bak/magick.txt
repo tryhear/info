@@ -1,0 +1,5 @@
+mogrify -background white -deskew 40% *.jpg
+mogrify -sigmoidal-contrast 10,50% *.jpg
+mogrify -normalize *.jpg
+
+mogrify -sigmoidal-contrast 10,50% -background white -deskew 40% -normalize *.jpg
