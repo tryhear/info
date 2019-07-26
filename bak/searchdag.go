@@ -28,22 +28,23 @@ func checkErr(err error){
 func search_xm(keyword string){
 	db,err:=sql.Open("mysql",userName+":"+password+"@tcp("+ip+":"+port+")/"+dbName+"?charset=utf8")
 	checkErr(err)
-	result,err:=db.Query("SELECT p_xmmc,p_Guid FROM `eam_project` where p_Xmmc like '%"+ keyword +"%'")
+	result,err:=db.Query("SELECT p_xmmc,p_Guid,p_Xmdh FROM `eam_project` where p_Xmmc like '%"+ keyword +"%'")
 
 	if err!=nil{
 		checkErr(err)
 	}
-	fmt.Printf("%-50s%-20s\n","项目名称","Guid")
+	fmt.Printf("%-50s%-50s%-20s\n","项目名称","Guid","项目档号")
 	for result.Next(){
 		var(
 			p_xmmc string
 			p_Guid string
+			p_Xmdh string
 		)
-		err=result.Scan(&p_xmmc,&p_Guid)
+		err=result.Scan(&p_xmmc,&p_Guid,&p_Xmdh)
 		if err!=nil{
 			checkErr(err)
 		}
-		fmt.Printf("%-50s%-20s\n",p_xmmc,p_Guid)
+		fmt.Printf("%-50s%-50s%-20s\n",p_xmmc,p_Guid,p_Xmdh)
 	}
 	defer result.Close()
 }
@@ -55,7 +56,7 @@ func search_gc(keyword string){
 	if err!=nil{
 		checkErr(err)
 	}
-	fmt.Printf("%-50s%-20s%-20s\n","工程名称","工程档号","Guid")
+	fmt.Printf("%-50s%-20s%-50s\n","工程名称","工程档号","Guid")
 	for result.Next(){
 		var(
 			sp_Gcmc string
@@ -66,7 +67,7 @@ func search_gc(keyword string){
 		if err!=nil{
 			checkErr(err)
 		}
-		fmt.Printf("%-50s%-20s%-20s\n",sp_Gcmc,sp_Gcdh,sp_Guid)
+		fmt.Printf("%-50s%-20s%-50s\n",sp_Gcmc,sp_Gcdh,sp_Guid)
 	}
 	defer result.Close()
 }
