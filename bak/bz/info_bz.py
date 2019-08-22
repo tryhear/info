@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import traceback
 import re
+from icecream import ic
+import pysnooper
 
 
 def 打开文件():
@@ -53,7 +55,7 @@ def 转换csv(fn):
         except BaseException:
             traceback.print_exc()
 
-
+# @pysnooper.snoop()
 def 切割pdf(起始页, 终止页, 文件存储路径, 打开文件号, 生成文件号):
     try:
         起始页 = int(起始页)
@@ -128,7 +130,7 @@ def 遍历csv(fn):
             # print(列)
         return 列
 
-
+# @pysnooper.snoop()
 def 提交变量值(fn):
     global 项目地点, 建设单位, 设计单位, 监理单位, 勘察单位, 立项批准单位, 立项批准文号, 规划许可证号, 施工许可证号, 国有土地使用证号, 高度, 基础类型, 结构类型, 地上层数, 地下层数, 建筑面积, 用地面积, 单体Key, 施工单位, 开工日期, 竣工日期, 项目名称, 项目类型, 项目Key, 工程档号, 总登记号
 
@@ -170,6 +172,8 @@ def 提交变量值(fn):
                 用地面积 = i[2]
             elif i[0] == "单体Key":
                 单体Key = i[2]
+            elif i[0] == "项目Key":
+                项目Key = i[2]
             elif i[0] == "施工单位":
                 施工单位 = i[2]
             elif i[0] == "开工日期":
@@ -178,9 +182,9 @@ def 提交变量值(fn):
                 竣工日期 = i[2]
             elif i[0] == "工程档号":
                 工程档号 = i[2]
-            # elif i[0] == "总登记号":
-            #    总登记号 = i[2]
-    os.system("cls")
+            elif i[0] == "总登记号":
+                总登记号 = i[2]
+    #os.system("cls")
 
 
 def 创建文件项(名称):
@@ -228,7 +232,7 @@ class 项目xml:
 
         项目类型 = input("项目类型（0、1、2）：")
         if 项目类型 == "":
-            项目类型 = "项目类型（0、1、2）"
+            项目类型 = "1"
 
         总登记号 = input("总登记号")
         if 总登记号 == "":
@@ -241,12 +245,17 @@ class 项目xml:
 
         项目Key = input("项目Key:")
         if 项目Key == "":
-            项目Key = "项目Key"
+            项目Key = "项目Key未填"
+
+        单体Key = input("单体Key:")
+        if 单体Key == "":
+            单体Key = "单体Key未填"
 
         self.项目名称 = 项目名称
         self.项目类型 = 项目类型
         self.总登记号 = 总登记号
         self.项目Key = 项目Key
+        self.单体Key = 单体Key
 
         if os.path.exists('项目名称'):
             shutil.rmtree(项目名称, True)
@@ -256,7 +265,25 @@ class 项目xml:
 
         self.临时文件 += r'<?xml version="1.0" encoding="utf-8"?>'
         self.临时文件 += r"<ElectronicFileInformation>"
+        '''
         self.临时文件 += r'<Project Id="1" Xmlx="{项目类型}" Xmmc="{项目名称}" Xmdd="{项目地点}" Jsdw="{建设单位}" Djdw="" Lxpzdw="{立项批准单位}" Sjdw="{设计单位}" Jldw="{监理单位}" Kcdw="{勘察单位}" Lxpzwh="{立项批准文号}" Ghxkzh="{规划许可证号}" Ydghxkzh="" Gytdsyzh="{国有土地使用证号}" Sgxkzh="{施工许可证号}" Yjdw="{移交单位}" Bz="" Key="{项目Key}">'.format(
+            项目类型=项目类型,
+            项目名称=项目名称,
+            项目地点=项目地点,
+            建设单位=建设单位,
+            立项批准单位=立项批准单位,
+            设计单位=设计单位,
+            监理单位=监理单位,
+            勘察单位=勘察单位,
+            立项批准文号=立项批准文号,
+            规划许可证号=规划许可证号,
+            国有土地使用证号=国有土地使用证号,
+            施工许可证号=施工许可证号,
+            移交单位=建设单位,
+            项目Key=项目Key,
+        )
+        '''
+        self.临时文件 += r'<Project ArchivesId="001" Type="{项目类型}" Name="{项目名称}" Address="{项目地点}" ConstructorUnit="{建设单位}" RepConstructionUnit="" ApprovalUnit="" DesignUnit="{设计单位}" SupervisorUnit="{监理单位}" SurveyUnit="{勘察单位}" Longitude="0.0" Latitude="0.0" Remark="" Id="{项目Key}">'.format(
             项目类型=项目类型,
             项目名称=项目名称,
             项目地点=项目地点,
@@ -274,6 +301,7 @@ class 项目xml:
         )
 
     def 创建单位工程(self, 单体序号, 工程名称):
+        '''
         self.临时文件 += r'<Sproject Jsdw="{建设单位}" Djdw="" Sgdw="{施工单位}" Sjdw="{设计单位}" Jldw="{监理单位}" Kcdw="{勘察单位}" Lxpzwh="{立项批准文号}" Ghxkzh="{规划许可证号}" Ydghxkzh="" Sgxkzh="{施工许可证号}" Gd="{高度}" Jclx="{基础类型}" Jglx="{结构类型}" Dscs="{地上层数}" Dxcs="{地下层数}" Jzmj="{建筑面积}" Kgrq="{开工日期}" Jgrq="{竣工日期}" Ydmj="{用地面积}" Zs="0" Gcys="0" Gcjs="0" Id="{单体序号}" ProjectId="1" Dwgclx="{单位工程类型}" Gcmc="{工程名称}" Gcdd="{工程地点}" Yjdw="{移交单位}" Bz="" Gcdh="{工程档号}" Key="{单体Key}">'.format(
             建设单位=建设单位,
             施工单位=施工单位,
@@ -300,7 +328,34 @@ class 项目xml:
             工程档号=工程档号,
             单体Key=单体Key,
         )
-
+        '''
+        self.临时文件 += r'<SingleProject ArchivesId="001" ProjectId="{项目Key}" Type="1" Number="{工程档号}" Name="{工程名称}" Address="{工程地点}" FilingPerson="" RetentionPeriod="1" SecretLevel="1" OrderNumber="{单体序号}" ClassificationNumber="" FilingDate="" TransferingUnit="" ConstructorUnit="{建设单位}" Remark="" Id="{单体Key}" RepConstructionUnit="" BuildUnit="{施工单位}" DesignUnit="{设计单位}" SurveyUnit="{勘察单位}" SupervisorUnit="{监理单位}" ApprovalUnit="" ApprovalNumber="" PlanningPermit="{规划许可证号}" LandPlanningPermit="" BuildNumber="{施工许可证号}" OwnedLandNumber="" Height="{高度}" BasicType="" StructureType="" UpFloor="{地上层数}" DownFloor="{地下层数}" FloorArea="{建筑面积}" StartDate="{开工日期}" CompletionDate="{竣工日期}" LandArea="{用地面积}" BuildinNumber="1" Budget="0" FinalAccounts="0">'.format(
+            建设单位=建设单位,
+            施工单位=施工单位,
+            设计单位=设计单位,
+            监理单位=监理单位,
+            勘察单位=勘察单位,
+            立项批准文号=立项批准文号,
+            规划许可证号=规划许可证号,
+            施工许可证号=施工许可证号,
+            高度=高度,
+            基础类型=基础类型,
+            结构类型=结构类型,
+            地上层数=地上层数,
+            地下层数=地下层数,
+            建筑面积=建筑面积,
+            开工日期=开工日期,
+            竣工日期=竣工日期,
+            用地面积=用地面积,
+            单体序号=单体序号,
+            单位工程类型=项目类型,
+            工程名称=工程名称[0],
+            工程地点=项目地点,
+            移交单位=建设单位,
+            工程档号=工程档号,
+            单体Key=单体Key,
+            项目Key=项目Key,
+        )
         os.mkdir(单体Key)
         shutil.move(单体Key, 项目名称)
         self.单体序号递增 += 1
@@ -425,7 +480,7 @@ if __name__ == "__main__":
     单体序号 = 1
     案卷序号 = 1
     文件序号 = 1
-    global 总登记号,文件名称
+    global 文件名称,总登记号
     文件名称=1
     是否继续 = True
     while 是否继续:
@@ -446,7 +501,7 @@ if __name__ == "__main__":
         axml.总登记号 = 总登记号
         axml.案卷序号 = 案卷序号
         axml.创建单位工程(单体序号, 文件名.split("."[0]))
-        axml.创建移交内容(csv列表)
+        # axml.创建移交内容(csv列表)
         axml.创建案卷(csv列表, 案卷序号, 文件名称,文件序号)
         os.remove(文件名.split(".")[0] + '.csv')
 
