@@ -1,6 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 import sys
+#import traceback
 
 pd.set_option("display.unicode.ambiguous_as_wide", True)
 pd.set_option("display.unicode.east_asian_width", True)
@@ -14,7 +15,7 @@ pd.set_option("max_colwidth", 60)
 
 def search_xm():
     sql_xm = (
-        "SELECT p_xmmc,p_Guid FROM `eam_project` where p_Xmmc like '" + search + "'"
+        "SELECT name,id FROM `project` where name like '" + search + "'"
     )
     try:
         df_xm = pd.read_sql_query(sql_xm, engine)
@@ -22,11 +23,12 @@ def search_xm():
     except:
         print("超时！未连接网络?")
         sys.exit(-1)
+        #traceback.print_exc()
 
 
 def search_gc():
     sql_gc = (
-        "select sp_Gcmc,sp_Gcdh,sp_Guid from eam_singleproject where sp_gcmc like '"
+        "select name,number,id from single_project where name like '"
         + search
         + "'"
     )
@@ -40,10 +42,10 @@ def search_gc():
 
 def search_file():
     sql_file = (
-        "SELECT file_ajtm,file_num FROM `eam_file` where file_ajtm like '"
+        "SELECT name,num FROM `file` where name like '"
         + search
         + "'"
-        + " and file_num <> ''"
+        + " and num <> ''"
     )
     try:
         df_file = pd.read_sql_query(sql_file, engine)
@@ -55,18 +57,18 @@ def search_file():
 
 def search_all():
     sql_xm = (
-        "SELECT p_xmmc,p_Guid FROM `eam_project` where p_Xmmc like '" + search + "'"
+        "SELECT name,id FROM `project` where name like '" + search + "'"
     )
     sql_gc = (
-        "select sp_Gcmc,sp_Gcdh,sp_Guid from eam_singleproject where sp_gcmc like '"
+        "select name,number,id from single_project where name like '"
         + search
         + "'"
     )
     sql_file = (
-        "SELECT file_ajtm,file_num FROM `eam_file` where file_ajtm like '"
+        "SELECT name,num FROM `file` where name like '"
         + search
         + "'"
-        + " and file_num <> ''"
+        + " and num <> ''"
     )
     try:
         df_xm = pd.read_sql_query(sql_xm, engine)
@@ -85,7 +87,7 @@ def search_all():
 
 
 if __name__ == "__main__":
-    engine = create_engine("mysql+pymysql://root:root@59.213.89.54:3306/ucamis_dy")
+    engine = create_engine("mysql+pymysql://root:root@59.213.89.54:3306/wisdom-dossier")
     search = input("请输入要查找的关键字：")
 
     while True:
