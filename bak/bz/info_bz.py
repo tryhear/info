@@ -360,7 +360,7 @@ class 项目xml:
                 else:
                     单卷序号 += 1
                     文件Key = str(uuid.uuid4())
-                    self.临时文件 += r'<RecordPaper Number="{文件档号}" Name="{文件名称}" PersonLiable="{责任者}" RetentionPeriod="1" SecretLevel="0" StartTime="{起始时间}" EndTime="{终止时间}" Amount="{页数}" Specifications="" Tabloid="" KeyWord="" Remark="" Qsy="{起始页}" Zzy="{终止页}" CarrierType="0" DrawingNumber="{文图号}" Text="" RecordType="" Manuscript="" ArchivesId="001" FilesId="{所属案卷Key}" SingleProjectId="{所属单体Key}" ProjectId="{所属项目Key}" TransferContentId="" Type="0" SortNum="{文件序号}" OrderNumber="{文件序号}" FileUrl="{单张文件路径}" Id="{Key}"/>'.format(
+                    self.临时文件 += r'<RecordPaper Number="{文件档号}" Name="{文件名称}" PersonLiable="{责任者}" RetentionPeriod="1" SecretLevel="0" StartTime="{起始时间}" EndTime="{终止时间}" Amount="{页数}" Specifications="" Tabloid="" KeyWord="" Remark="" Qsy="{起始页}" Zzy="{终止页}" CarrierType="1" DrawingNumber="{文图号}" Text="" RecordType="" Manuscript="" ArchivesId="001" FilesId="{所属案卷Key}" SingleProjectId="{所属单体Key}" ProjectId="{所属项目Key}" TransferContentId="" Type="0" SortNum="{文件序号}" OrderNumber="{文件序号}" FileUrl="{单张文件路径}" Id="{Key}"/>'.format(
                         文件名称=i[0],
                         文件档号=案卷档号[0] + "-" + str(单卷序号).zfill(3),
                         责任者=建设单位,
