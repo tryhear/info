@@ -1,3 +1,4 @@
+    
 import cv2
 import os
 import os.path
@@ -16,7 +17,11 @@ for parent,dirnames,filenames in os.walk(rootdir):
             CompressImage(apath)
             img = cv2.imread(apath)
             mask=cv2.imread('c:\\mask.jpg',0)
-            dst_TELEA = cv2.inpaint(img,mask,3,cv2.INPAINT_TELEA)
-            cv2.imwrite(apath+'_.jpg',dst_TELEA)
+            bg=cv2.imread('c:\\backgroud.jpg')
+            #dst_TELEA = cv2.inpaint(img,mask,3,cv2.INPAINT_TELEA)
+            dst=cv2.bitwise_or(img,bg,mask=mask)
+            dst=cv2.add(dst,img)
+            #cv2.imwrite(apath.split('\\')[-1].split('.')[0]+'_.jpg',dst)
+            cv2.imwrite(apath,dst)
         else:
             pass
