@@ -10,6 +10,8 @@ import traceback
 import re
 from icecream import ic
 
+# import pysnooper
+
 
 def 打开文件():
     root = tk.Tk()
@@ -86,7 +88,7 @@ def 切割pdf(起始页, 终止页, 文件存储路径, 打开文件号, 生成�
     except BaseException:
         pass
         # traceback.print_exc()
-        #ic("文件不存在")
+        # ic("文件不存在")
 
 
 def 现在时间():
@@ -320,6 +322,7 @@ class 项目xml:
         shutil.move(单体Key, 项目名称)
         self.单体序号递增 += 1
 
+    # @pysnooper.snoop()
     def 创建案卷(self, fn, 案卷序号=1, 文件序号=1):
         判定1 = 0
         self.案卷序号 = 案卷序号
@@ -331,6 +334,11 @@ class 项目xml:
                 pass
             else:
                 if i[1] == "0":
+                    if "图" in i[0]:
+                        载体类型 = "1"
+                    else:
+                        载体类型 = "0"
+                    # ic(i[0],载体类型)
                     单卷序号 = 0
                     if 判定1 != 0:
                         self.临时文件 += r"</File>"
@@ -360,11 +368,13 @@ class 项目xml:
                 else:
                     单卷序号 += 1
                     文件Key = str(uuid.uuid4())
-                    self.临时文件 += r'<RecordPaper Number="{文件档号}" Name="{文件名称}" PersonLiable="{责任者}" RetentionPeriod="1" SecretLevel="0" StartTime="{起始时间}" EndTime="{终止时间}" Amount="{页数}" Specifications="" Tabloid="" KeyWord="" Remark="" Qsy="{起始页}" Zzy="{终止页}" CarrierType="1" DrawingNumber="{文图号}" Text="" RecordType="" Manuscript="" ArchivesId="001" FilesId="{所属案卷Key}" SingleProjectId="{所属单体Key}" ProjectId="{所属项目Key}" TransferContentId="" Type="0" SortNum="{文件序号}" OrderNumber="{文件序号}" FileUrl="{单张文件路径}" Id="{Key}"/>'.format(
+
+                    # ic(">>",i[0],载体类型)
+                    self.临时文件 += r'<RecordPaper Number="{文件档号}" Name="{文件名称}" PersonLiable="{责任者}" RetentionPeriod="1" SecretLevel="0" StartTime="{起始时间}" EndTime="{终止时间}" Amount="{页数}" Specifications="" Tabloid="" KeyWord="" Remark="" Qsy="{起始页}" Zzy="{终止页}" CarrierType="{载体类型}" DrawingNumber="{文图号}" Text="" RecordType="" Manuscript="" ArchivesId="001" FilesId="{所属案卷Key}" SingleProjectId="{所属单体Key}" ProjectId="{所属项目Key}" TransferContentId="" Type="0" SortNum="{文件序号}" OrderNumber="{文件序号}" FileUrl="{单张文件路径}" Id="{Key}"/>'.format(
                         文件名称=i[0],
                         文件档号=案卷档号[0] + "-" + str(单卷序号).zfill(3),
                         责任者=建设单位,
-                        文图号 = i[4],
+                        文图号=i[4],
                         起始时间=处理日期无后缀(i[3]),
                         终止时间=处理日期无后缀(i[3]),
                         页数=str(int(i[2]) - int(i[1]) + 1),
@@ -377,6 +387,7 @@ class 项目xml:
                         所属项目Key=项目Key,
                         所属单体Key=单体Key,
                         所属案卷Key=案卷Key,
+                        载体类型=载体类型,
                     )
                     # ic(axml.案卷序号-1)
                     切割pdf(i[1], i[2], 文件存储路径, str(axml.案卷序号 - 1), 文件Key)
@@ -425,7 +436,7 @@ if __name__ == "__main__":
             临时文件 += axml.临时文件
             是否继续 = True
             单体序号 += 1
-            #案卷序号 = axml.案卷序号
+            # 案卷序号 = axml.案卷序号
             案卷序号 = 1
             总登记号 = axml.总登记号
             文件名称 = axml.文件名称
