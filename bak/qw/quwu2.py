@@ -49,19 +49,18 @@ for parent,dirnames,filenames in os.walk(rootdir):
 
             dst=cv2.bitwise_or(img,bg,mask=mask)
             dst=cv2.add(dst,img)
-            '''
+            
             b, g, r = cv2.split(dst)
+            r[r > 220] = 255
+            b[b > 220] = 255
+            g[g > 220] = 255
             b = cv2.equalizeHist(b)
             g = cv2.equalizeHist(g)
-            
-            r[r > 230] = 255
             r = cv2.equalizeHist(r)
-            #g[g > 100] = 255
-            #b[b > 100] = 255
             O = cv2.merge([b,g,r])
-            '''
-            #cv2.imwrite(apath+"_.jpg",dst)
-            cv2.imwrite(apath,dst)
+            
+            cv2.imwrite(apath+"_.jpg",O)
+            #cv2.imwrite(apath,dst)
 
             
             #cv2.imwrite(apath.split('\\')[-1].split('.')[0]+'_.jpg',dst)
