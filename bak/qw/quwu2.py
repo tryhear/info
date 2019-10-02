@@ -56,7 +56,7 @@ for parent,dirnames,filenames in os.walk(rootdir):
             
             img_mask=baweraopen(img_mask,400)
             
-            img_mask=cv2.fillPoly(img_mask,[np.array(points)],[255,255,255])
+            #img_mask=cv2.fillPoly(img_mask,[np.array(points)],[255,255,255])
             img_mask=img_mask.astype(np.uint8)
             ret,mask=cv2.threshold(img_mask,35,255,cv2.THRESH_BINARY)
             cv2.imwrite("xxx.jpg",img_mask)
