@@ -138,7 +138,7 @@ def dwgc():
     zs = ""
     projectid = xmid
     bgqx = ""
-    mj = "0"
+    mj = "1"
     bz = ""
     key = str(uuid.uuid4()).upper()
     key = ""
@@ -389,7 +389,7 @@ def aj():
     singleprojectrevceivelistid = sid
     dh = ""
     wth = ""
-    bgqx = "1"
+    bgqx = "2"
     ztlx = "0"
     wb = ""
     gg = "4"
@@ -404,7 +404,7 @@ def aj():
     ajtm = ""
     bzdw = ""
     gg = "0"
-    bgqx = "0"
+    bgqx = "2"
     ljsj = ""
     ztc = ""
     fz = ""
@@ -418,8 +418,8 @@ def aj():
     ajzrz = jsdw
     jnwjqssj = jnwjzzsj = datenow_
     jnwjqssj = jnwjzzsj = ""
-    bgqx = "0"
-    mj = "0"
+    bgqx = "2"
+    mj = "1"
     tmp1 = 1
     try:
         with open(xmmc + ".csv") as f:
