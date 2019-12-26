@@ -15,7 +15,7 @@ for dir in dirs:
             else:
                 print(path)
                 count+=1
-                print(path+"error!!!")
+                #print(path+"error!!!")
                 #input()
             #os.system("cd %s\\%s\\%s" %(dir,dir,dir))
 

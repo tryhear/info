@@ -96,8 +96,13 @@ def 切割pdf(起始页, 终止页, 文件存储路径, 打开文件号, 生成�
 
 def 现在时间():
     now_ = datetime.datetime.now()
-    datenow_ = "%s/%s/%s" % (now_.year, now_.month, now_.day)
+    datenow_ = "%s-%s-%s" % (now_.year, now_.month, now_.day)
     return datenow_
+
+
+def 大后天():
+    theday = datetime.date.today() + datetime.datedelta(day=2)
+    return "%s-%s-%s" % (theday.year, theday.month, theday.day)
 
 
 def 处理日期(fn):
@@ -110,11 +115,14 @@ def 处理日期(fn):
 
 
 def 处理日期无后缀(fn):
-    处理完成的日期 = ""
+    处理完成的日期 = 现在时间()
     if not fn.isdigit() or len(fn) < 8:
-        处理完成的日期 = ""
+        处理完成的日期 = 现在时间()
     else:
-        处理完成的日期 = fn[:4] + "-" + fn[4:6] + "-" + fn[6:8]
+        try:
+            处理完成的日期 = "%s-%s-%s" % (datetime.date(fn[:4], fn[4:6], fn[6:8]))
+        except:
+            处理完成的日期 = 现在时间()
     return 处理完成的日期
 
 
@@ -127,7 +135,7 @@ def 审核时间():
         审核时间 = 两天后 + datetime.timedelta(1)
     else:
         审核时间 = 两天后
-    datenow_ = "%s/%s/%s" % (审核时间.year, 审核时间.month, 审核时间.day)
+    datenow_ = "%s-%s-%s" % (审核时间.year, 审核时间.month, 审核时间.day)
     return datenow_
 
 
@@ -144,7 +152,7 @@ def 遍历csv(fn):
 
 
 def 提交变量值(fn):
-    global 项目地点, 建设单位, 设计单位, 监理单位, 勘察单位, 立项批准单位, 立项批准文号, 规划许可证号, 施工许可证号, 国有土地使用证号, 高度, 基础类型, 结构类型, 地上层数, 地下层数, 建筑面积, 用地面积, 单体Key, 施工单位, 开工日期, 竣工日期, 项目名称, 项目类型, 项目Key, 工程档号, 档案馆号, 项目编号, 工程预算, 工程结算, 用地规划许可证号, 合同价, 资金来源, 设备用房建筑面积, 居住建筑面积, 公建建筑面积, 配套设施建筑面积, 工业建筑面积, 车位建筑面积, 其他建筑面积, 总设容建筑面积, 地下总建筑面积, 地上总建筑面积, 住宅面积, 地上公建面积, 地下公建面积, 主要用途, 建筑物功能分类_数字, 建筑状态_数字, 外墙形式, 地上车位数, 地下车位数, 户数, 施工图审查单位, 工程主要检测单位, 安全监督单位, 质量监督单位, 合同工期, 实际工期, 环保验收日期, 防雷验收日期, 规划验收日期, 竣工验收日期, 园林验收日期, 绿色建筑评测日期, 联合验收日期, 消防验收日期, 施工专业分包单位, 商砼预拌单位, 绿地率, 建筑密度, 总停车位数, 经度, 纬度, 栋数, 总长度, 总投资金额
+    global 项目地点, 建设单位, 设计单位, 监理单位, 勘察单位, 立项批准单位, 立项批准文号, 规划许可证号, 施工许可证号, 国有土地使用证号, 高度, 基础类型, 结构类型, 地上层数, 地下层数, 建筑面积, 用地面积, 单体Key, 施工单位, 开工日期, 竣工日期, 项目名称, 项目类型, 项目Key, 工程档号, 档案馆号, 项目编号, 工程预算, 工程结算, 用地规划许可证号, 合同价, 资金来源, 设备用房建筑面积, 居住建筑面积, 公建建筑面积, 配套设施建筑面积, 工业建筑面积, 车位建筑面积, 其他建筑面积, 总设容建筑面积, 地下总建筑面积, 地上总建筑面积, 住宅面积, 地上公建面积, 地下公建面积, 主要用途, 建筑物功能分类_数字, 建筑状态_数字, 外墙形式, 地上车位数, 地下车位数, 户数, 施工图审查单位, 工程主要检测单位, 安全监督单位, 质量监督单位, 合同工期, 实际工期, 环保验收日期, 防雷验收日期, 规划验收日期, 竣工验收日期, 园林验收日期, 绿色建筑评测日期, 联合验收日期, 消防验收日期, 施工专业分包单位, 商砼预拌单位, 绿地率, 建筑密度, 总停车位数, 经度, 纬度, 栋数, 总长度, 总投资金额, 立卷人, 审核人, 分类大纲代码, 砂浆预拌单位
 
     for i in fn:
         if i[1] == ":":
@@ -290,43 +298,50 @@ def 提交变量值(fn):
                 try:
                     环保验收日期 = 处理日期(i[2])
                 except:
-                    环保验收日期 = ""
+                    环保验收日期 = 现在时间()
             elif i[0] == "防雷验收日期":
                 try:
                     防雷验收日期 = 处理日期(i[2])
                 except:
-                    防雷验收日期 = ""
+                    防雷验收日期 = 现在时间()
             elif i[0] == "规划验收日期":
                 try:
                     规划验收日期 = 处理日期(i[2])
                 except:
-                    规划验收日期 = ""
+                    规划验收日期 = 现在时间()
             elif i[0] == "竣工验收日期":
                 try:
                     竣工验收日期 = 处理日期(i[2])
                 except:
-                    竣工验收日期 = ""
+                    竣工验收日期 = 现在时间()
             elif i[0] == "园林验收日期":
                 try:
                     园林验收日期 = 处理日期(i[2])
                 except:
-                    园林验收日期 = ""
+                    园林验收日期 = 现在时间()
             elif i[0] == "绿色建筑评测日期":
                 try:
                     绿色建筑评测日期 = 处理日期(i[2])
                 except:
-                    绿色建筑评测日期 = ""
+                    绿色建筑评测日期 = 现在时间()
             elif i[0] == "联合验收日期":
                 try:
                     联合验收日期 = 处理日期(i[2])
                 except:
-                    联合验收日期 = ""
+                    联合验收日期 = 现在时间()
             elif i[0] == "消防验收日期":
                 try:
                     消防验收日期 = 处理日期(i[2])
                 except:
-                    消防验收日期 = ""
-
+                    消防验收日期 = 现在时间()
+            elif i[0] == "立卷人":
+                立卷人 = i[2]
+            elif i[0] == "审核人":
+                审核人 = i[2]
+            elif i[0] == "分类大纲代码":
+                分类大纲代码 = i[2]
+            elif i[0] == "砂浆预拌单位":
+                砂浆预拌单位 = i[2]
 
             # elif i[0] == "总登记号":
             #    总登记号 = i[2]
@@ -336,7 +351,7 @@ def 提交变量值(fn):
 def 创建文件项(名称):
     Key = str(uuid.uuid4())
     案卷档号 = (工程档号 + "-" + str(axml.案卷序号).zfill(3),)
-    axml.临时文件 += r'<File ArchivesId="{档案馆号}" ProjectId="{项目Key}" SingleProjectId="{单体Key}" OldNumber="" Name="{案卷名称}" Num="{总登记号}" RetentionPeriod="2" SecretLevel="1" FilingBy="" Filinged="{立卷时间}" AuditorBy="" AuditorDate="{审核时间}" Remark="" Number="{案卷档号}" PreparedBy="{编制单位}" OrderNumber="{案卷序号}" Prepared="{编制时间}" StartTime="{卷内文件起始时间}" EndTime="{卷内文件终止时间}" PersonLiable="{责任者}" KeyWord="无" Specifications="3" Id="{Key}">'.format(
+    axml.临时文件 += r'<File ArchivesId="{档案馆号}" ProjectId="{项目Key}" SingleProjectId="{单体Key}" OldNumber="" Name="{案卷名称}" Num="{总登记号}" RetentionPeriod="2" SecretLevel="1" FilingBy="{立卷人}" Filinged="{立卷时间}" Auditored="{审核时间}" AuditorBy="{审核人}" Remark="" Number="{案卷档号}" PreparedBy="{编制单位}" OrderNumber="{案卷序号}" Prepared="{编制时间}" StartTime="{卷内文件起始时间}" EndTime="{卷内文件终止时间}" PersonLiable="{责任者}" KeyWord="无" Specifications="3" Id="{Key}" Classification="{分类大纲代码}">'.format(
         案卷序号=axml.案卷序号,
         单体序号=单体序号,
         档案馆号=档案馆号,
@@ -349,12 +364,15 @@ def 创建文件项(名称):
         立卷时间=现在时间(),
         编制时间=现在时间(),
         审核时间=审核时间(),
-        卷内文件起始时间="",
-        卷内文件终止时间="",
+        卷内文件起始时间=现在时间(),
+        卷内文件终止时间=现在时间(),
         责任者=建设单位,
         项目Key=项目Key,
         单体Key=单体Key,
         Key=Key,
+        立卷人=立卷人,
+        审核人=审核人,
+        分类大纲代码=分类大纲代码,
     )
     return Key, 案卷档号
 
@@ -417,7 +435,7 @@ class 项目xml:
 
         self.临时文件 += r'<?xml version="1.0" encoding="utf-8"?>'
         self.临时文件 += r"<ElectronicFileInformation>"
-        self.临时文件 += r'<Project ArchivesId="{档案馆号}" Type="{项目类型}" Number="{项目编号}" Name="{项目名称}" Address="{项目地点}" ConstructorUnit="{建设单位}" RepConstructionUnit="无" ApprovalUnit="{立项批准单位}" DesignUnit="{设计单位}" SupervisorUnit="{监理单位}" SurveyUnit="{勘察单位}" Longitude="{经度}" Latitude="{纬度}" Remark="" Id="{项目Key}" projectUse="1" keyProject="1" buildNature="1" greenSpaceRate="{绿地率}" buildDensity="{建筑密度}" totalParkSpace="{总停车位数}" upperParkSpace="{地上车位数}" lowerParkSpace="{地下车位数}" households="{栋数}" totalLength="{总长度}" totalInvestmentAmount="{总投资金额}" budget="{工程预算}" finalAccounts="{工程结算}" contractPrice="{合同价}" funded="{资金来源}" deviceBuildArea="{设备用房建筑面积}" liveBuildArea="{居住建筑面积}" publicBuildArea="{公建建筑面积}" supporteFacilityBuildArea="{配套设施建筑面积}" industryBuildArea="{工业建筑面积}" parkingBuildArea="{车位建筑面积}" otherBuildArea="{其他建筑面积}" totleDesignBuildArea="{总设容建筑面积}" lowerTotalBuildArea="{地下总建筑面积}" upperTotalBuildArea="{地上总建筑面积}" buildUnit="{施工单位}" buildMajorPackageUnit="{施工专业分包单位}" ssybUnit="{商砼预拌单位}" sgtscUnit="{施工图审查单位}" gczyjcUnit="{工程主要检测单位}" safeControlUnit="{安全监督单位}" qualityControlUnit="{质量监督单位}">'.format(
+        self.临时文件 += r'<Project ArchivesId="{档案馆号}" Type="{项目类型}" Number="{项目编号}" Name="{项目名称}" Address="{项目地点}" ConstructorUnit="{建设单位}" RepConstructionUnit="无" ApprovalUnit="{立项批准单位}" DesignUnit="{设计单位}" SupervisorUnit="{监理单位}" SurveyUnit="{勘察单位}" Longitude="{经度}" Latitude="{纬度}" Remark="" Id="{项目Key}" projectUse="1" keyProject="0" buildNature="1" greenSpaceRate="{绿地率}" buildDensity="{建筑密度}" totalParkSpace="{总停车位数}" upperParkSpace="{地上车位数}" lowerParkSpace="{地下车位数}" households="{栋数}" totalLength="{总长度}" totalInvestmentAmount="{总投资金额}" budget="{工程预算}" finalAccounts="{工程结算}" contractPrice="{合同价}" funded="{资金来源}" deviceBuildArea="{设备用房建筑面积}" liveBuildArea="{居住建筑面积}" publicBuildArea="{公建建筑面积}" supporteFacilityBuildArea="{配套设施建筑面积}" industryBuildArea="{工业建筑面积}" parkingBuildArea="{车位建筑面积}" otherBuildArea="{其他建筑面积}" totleDesignBuildArea="{总设容建筑面积}" lowerTotalBuildArea="{地下总建筑面积}" upperTotalBuildArea="{地上总建筑面积}" buildUnit="{施工单位}" buildMajorPackageUnit="{施工专业分包单位}" ssybUnit="{商砼预拌单位}" sgtscUnit="{施工图审查单位}" gczyjcUnit="{工程主要检测单位}" safeControlUnit="{安全监督单位}" qualityControlUnit="{质量监督单位}" OrderNumber="1" SyybUnit="{砂浆预拌单位}" Province="022" City="022011" Dist="022011003" BuildNumber="{栋数}">'.format(
             项目类型=项目类型,
             档案馆号=档案馆号,
             项目编号=项目编号,
@@ -437,6 +455,7 @@ class 项目xml:
             施工单位=施工单位,
             施工专业分包单位=施工专业分包单位,
             商砼预拌单位=商砼预拌单位,
+            砂浆预拌单位=砂浆预拌单位,
             工程主要检测单位=工程主要检测单位,
             安全监督单位=安全监督单位,
             质量监督单位=质量监督单位,
@@ -468,7 +487,7 @@ class 项目xml:
         )
 
     def 创建单位工程(self, 单体序号, 工程名称):
-        self.临时文件 += r'<SingleProject ArchvesId="{档案馆号}" ProjectId="{项目Key}" Type="1" Number="{工程档号}" Name="{工程名称}" Address="{工程地点}" FilingPerson="" RetentionPeriod="2" SecretLevel="1" OrderNumber="{单体序号}" ClassificationNumber="" FilingDate="" TransferingUnit="{移交单位}" ConstructorUnit="{建设单位}" Remark="" Id="{单体Key}" RepConstructionUnit="无" BuildUnit="{施工单位}" DesignUnit="{设计单位}" SurveyUnit="{勘察单位}" SupervisorUnit="{监理单位}" ApprovalUnit="{立项批准单位}" ApprovalNumber="{立项批准文号}" PlanningPermit="{规划许可证号}" LandPlanningPermit="{用地规划许可证号}" BuildNumber="{施工许可证号}" OwnedLandNumber="{国有土地使用证号}" Height="{高度}" BasicType="{基础类型}" StructureType="{结构类型}" UpFloor="{地上层数}" DownFloor="{地下层数}" FloorArea="{建筑面积}" StartDate="{开工日期}" CompletionDate="{竣工日期}" LandArea="{用地面积}" BuildinNumber="1" Budget="{工程预算}" FinalAccounts="{工程结算}" residenceArea="{住宅面积}" upperPublicArea="{地上公建面积}" lowerPublicArea="{地下公建面积}" mainPurpose="{主要用途}" functionType="{建筑物功能分类_数字}" outWallType="{外墙形式}" buildState="{建筑状态_数字}" upperParkSpace="{地上车位数}" lowerParkSpace="{地下车位数}" usePeriod="70" households="{户数}" defenseIntensity="1" fireResistantLevel="1" humanDefenseLevel="1" antiSeismicLevel="1" defenseThunderCheck="合格" buildSafeLevel="1" sgtscUnit="{施工图审查单位}" gczyjcUnit="{工程主要检测单位}" safeControlUnit="{安全监督单位}" qualityControlUnit="{质量监督单位}" contractStartDate="{合同开工时间}" contractCompletionDate="{合同竣工时间}" contractConstructionPeriod="{合同工期}" realConstructionPeriod="{实际工期}" designUseYear="50" landUseYear="70" greenestAcceptDate="{环保验收日期}" defthunderAcceptDate="{防雷验收日期}" planningAcceptDate="{规划验收日期}" fireAcceptDate="{消防验收日期}" gardenAcceptDate="{园林验收日期}" greenEvalDate="{绿色建筑评测日期}" unionAcceptDate="{联合验收日期}" CompletionAcceptDate="{竣工验收日期}">'.format(
+        self.临时文件 += r'<SingleProject ArchvesId="{档案馆号}" ProjectId="{项目Key}" Type="1" Number="{工程档号}" Name="{工程名称}" Address="{工程地点}" FilingPerson="{归档人}" RetentionPeriod="2" SecretLevel="1" OrderNumber="{单体序号}" Classification="{分类大纲代码}" FilingDate="{归档时间}" TransferingUnit="{移交单位}" ConstructorUnit="{建设单位}" Remark="" Id="{单体Key}" RepConstructionUnit="无" BuildUnit="{施工单位}" DesignUnit="{设计单位}" SurveyUnit="{勘察单位}" SupervisorUnit="{监理单位}" ApprovalUnit="{立项批准单位}" ApprovalNumber="{立项批准文号}" PlanningPermit="{规划许可证号}" LandPlanningPermit="{用地规划许可证号}" BuildNumber="{施工许可证号}" OwnedLandNumber="{国有土地使用证号}" Height="{高度}" BasicType="{基础类型}" StructureType="{结构类型}" UpFloor="{地上层数}" DownFloor="{地下层数}" FloorArea="{建筑面积}" StartDate="{开工日期}" CompletionDate="{竣工日期}" LandArea="{用地面积}" BuildinNumber="1" Budget="{工程预算}" FinalAccounts="{工程结算}" residenceArea="{住宅面积}" upperPublicArea="{地上公建面积}" lowerPublicArea="{地下公建面积}" mainPurpose="{主要用途}" functionType="{建筑物功能分类_数字}" outWallType="{外墙形式}" buildState="{建筑状态_数字}" upperParkSpace="{地上车位数}" lowerParkSpace="{地下车位数}" usePeriod="70" households="{户数}" defenseIntensity="8" fireResistantLevel="1" humanDefenseLevel="1" antiSeismicLevel="1" defenseThunderCheck="合格" buildSafeLevel="1" sgtscUnit="{施工图审查单位}" gczyjcUnit="{工程主要检测单位}" safeControlUnit="{安全监督单位}" qualityControlUnit="{质量监督单位}" contractStartDate="{合同开工时间}" contractCompletionDate="{合同竣工时间}" contractConstructionPeriod="{合同工期}" realConstructionPeriod="{实际工期}" designUseYear="50" landUseYear="70" greenestAcceptDate="{环保验收日期}" defthunderAcceptDate="{防雷验收日期}" planningAcceptDate="{规划验收日期}" fireAcceptDate="{消防验收日期}" gardenAcceptDate="{园林验收日期}" greenEvalDate="{绿色建筑评测日期}" unionAcceptDate="{联合验收日期}" CompletionAcceptDate="{竣工验收日期}" Province="022" City="022011" Dist="022011003" Longitude="{经度}" Latitude="{纬度}" BuildMajorPackageUnit="{施工专业分包单位}" SsybUnit="{商砼预拌单位}" SyybUnit="{砂浆预拌单位}">'.format(
             建设单位=建设单位,
             施工单位=施工单位,
             档案馆号=档案馆号,
@@ -526,6 +545,14 @@ class 项目xml:
             绿色建筑评测日期=绿色建筑评测日期,
             联合验收日期=联合验收日期,
             消防验收日期=消防验收日期,
+            分类大纲代码=分类大纲代码,
+            归档人=立卷人,
+            归档时间=现在时间(),
+            经度=经度,
+            纬度=纬度,
+            施工专业分包单位=施工专业分包单位,
+            商砼预拌单位=商砼预拌单位,
+            砂浆预拌单位=砂浆预拌单位,
         )
         try:
             shutil.rmtree(项目名称)
