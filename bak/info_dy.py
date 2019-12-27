@@ -120,7 +120,8 @@ def 处理日期无后缀(fn):
         处理完成的日期 = 现在时间()
     else:
         try:
-            处理完成的日期 = "%s-%s-%s" % (datetime.date(fn[:4], fn[4:6], fn[6:8]))
+            是否为有效时间 = datetime.date((int(fn[:4])), int(fn[4:6]), int(fn[6:8]))
+            处理完成的日期 = "%s-%s-%s" % (fn[:4], fn[4:6], fn[6:8])
         except:
             处理完成的日期 = 现在时间()
     return 处理完成的日期
@@ -351,7 +352,7 @@ def 提交变量值(fn):
 def 创建文件项(名称):
     Key = str(uuid.uuid4())
     案卷档号 = (工程档号 + "-" + str(axml.案卷序号).zfill(3),)
-    axml.临时文件 += r'<File ArchivesId="{档案馆号}" ProjectId="{项目Key}" SingleProjectId="{单体Key}" OldNumber="" Name="{案卷名称}" Num="{总登记号}" RetentionPeriod="2" SecretLevel="1" FilingBy="{立卷人}" Filinged="{立卷时间}" Auditored="{审核时间}" AuditorBy="{审核人}" Remark="" Number="{案卷档号}" PreparedBy="{编制单位}" OrderNumber="{案卷序号}" Prepared="{编制时间}" StartTime="{卷内文件起始时间}" EndTime="{卷内文件终止时间}" PersonLiable="{责任者}" KeyWord="无" Specifications="3" Id="{Key}" Classification="{分类大纲代码}">'.format(
+    axml.临时文件 += r'<File ArchivesId="{档案馆号}" ProjectId="{项目Key}" SingleProjectId="{单体Key}" OldNumber="" Name="{案卷名称}" Num="{总登记号}" RetentionPeriod="2" SecretLevel="1" FilingBy="{立卷人}" Filinged="{立卷时间}" Auditored="{审核时间}" AuditorBy="{审核人}" Remark="" Number="{案卷档号}" PreparedBy="{编制单位}" OrderNumber="{案卷序号}" Prepared="{编制时间}" StartTime="{卷内文件起始时间}" EndTime="{卷内文件终止时间}" PersonLiable="{责任者}" KeyWord="无" Specifications="40" Id="{Key}" Classification="{分类大纲代码}">'.format(
         案卷序号=axml.案卷序号,
         单体序号=单体序号,
         档案馆号=档案馆号,
@@ -567,6 +568,7 @@ class 项目xml:
         判定1 = 0
         self.案卷序号 = 案卷序号
 
+        案卷计数=1
         for i in fn:
             try:
                 int(i[1])
@@ -574,6 +576,8 @@ class 项目xml:
                 pass
             else:
                 if i[1] == "0":
+                    print ("%s:%s"%(案卷计数,i[0]))
+                    案卷计数+=1
                     if "图" in i[0]:
                         载体类型 = "1"
                     else:
@@ -613,7 +617,7 @@ class 项目xml:
                     文件Key = str(uuid.uuid4())
 
                     # ic(">>",i[0],载体类型)
-                    self.临时文件 += r'<RecordPaper Number="{文件档号}" Name="{文件名称}" PersonLiable="{责任者}" RetentionPeriod="2" SecretLevel="1" StartTime="{起始时间}" EndTime="{终止时间}" Amount="{页数}" Specifications="无" Tabloid="无" KeyWord="无" Remark="" Qsy="{起始页}" Zzy="{终止页}" CarrierType="{载体类型}" DrawingNumber="{文图号}" Text="无" RecordType="中文" Manuscript="无" ArchivesId="{档案馆号}" FilesId="{所属案卷Key}" SingleProjectId="{所属单体Key}" ProjectId="{所属项目Key}" TransferContentId="" Type="0" SortNum="{文件序号}" OrderNumber="{文件序号}" FileUrl="{单张文件路径}" Id="{Key}"/>'.format(
+                    self.临时文件 += r'<RecordPaper Number="{文件档号}" Name="{文件名称}" PersonLiable="{责任者}" RetentionPeriod="2" SecretLevel="1" StartTime="{起始时间}" EndTime="{终止时间}" Amount="{页数}" Specifications="40" Tabloid="无" KeyWord="无" Remark="" Qsy="{起始页}" Zzy="{终止页}" CarrierType="{载体类型}" DrawingNumber="{文图号}" Text="无" RecordType="中文" Manuscript="无" ArchivesId="{档案馆号}" FilesId="{所属案卷Key}" SingleProjectId="{所属单体Key}" ProjectId="{所属项目Key}" TransferContentId="" Type="0" SortNum="{文件序号}" OrderNumber="{文件序号}" FileUrl="{单张文件路径}" Id="{Key}"/>'.format(
                         文件名称=i[0],
                         档案馆号=档案馆号,
                         文件档号=案卷档号[0] + "-" + str(单卷序号).zfill(3),
